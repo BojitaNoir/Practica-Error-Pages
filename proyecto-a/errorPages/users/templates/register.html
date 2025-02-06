@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="text-center mb-4">Registro</h2>
+                <form method="post" onsubmit="return validateForm()">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required
+                               pattern="^[a-zA-Z0-9]+@utez\.edu\.mx$"
+                               title="Debes ingresar un correo de la UTEZ (ejemplo: usuario@utez.edu.mx).">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="name" name="name" required
+                               minlength="2" maxlength="50"
+                               pattern="^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$"
+                               title="Ingresa solo letras y espacios en el nombre.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="surname" class="form-label">Apellido:</label>
+                        <input type="text" class="form-control" id="surname" name="surname" required
+                               minlength="2" maxlength="50"
+                               pattern="^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$"
+                               title="Ingresa solo letras y espacios en el apellido.">
+                    </div>
+                    <div class="mb-3">
+                        <label for="control_number" class="form-label">Matrícula:</label>
+                        <input type="text" class="form-control" id="control_number" name="control_number" required
+                               pattern="^[A-Za-z0-9]{6,10}$"
+                               title="Ingresa una matrícula válida (entre 6 y 10 caracteres alfanuméricos).">
+                    </div>
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Edad:</label>
+                        <input type="number" class="form-control" id="age" name="age" required
+                               min="18" max="100"
+                               title="Ingresa una edad válida (entre 18 y 100 años).">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tel" class="form-label">Teléfono:</label>
+                        <input type="tel" class="form-control" id="tel" name="tel" required
+                               pattern="^[0-9]{10}$"
+                               title="Ingresa un número de teléfono válido (10 dígitos).">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Contraseña:</label>
+                        <input type="password" class="form-control" id="password1" name="password1" required
+                               minlength="8" maxlength="20"
+                               pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%&?])[A-Za-z\d!@#$%&?]{8,20}$"
+                               title="La contraseña debe tener entre 8 y 20 caracteres, incluyendo al menos una mayúscula, una minúscula, un número y un símbolo especial (!@#$%&?).">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirmar Contraseña:</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required
+                               minlength="8" maxlength="20"
+                               title="Confirma tu contraseña.">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Registrarse</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+    {% include 'mensaje.html' %}
+    <script>
+       function validateForm(event) {
+    event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+    const password1 = document.getElementById("password1").value;
+    const password2 = document.getElementById("password2").value;
+
+    if (password1.length < 8) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'La contraseña debe tener al menos 8 caracteres.',
+        });
+        return false;
+    }
+
+    if (!/\d/.test(password1)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'La contraseña debe contener al menos un número.',
+        });
+        return false;
+    }
+
+    if (!/[!@#$%&?]/.test(password1)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'La contraseña debe contener al menos un símbolo (!, #, $, %, & o ?).',
+        });
+        return false;
+    }
+
+    if (password1 !== password2) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Las contraseñas no coinciden.',
+        });
+        return false;
+    }
+
+    Swal.fire({
+        icon: 'success',
+        title: 'Registro exitoso',
+        text: 'Tu formulario ha sido validado correctamente.',
+    }).then(() => {
+        document.querySelector("form").submit();
+    });
+
+    return false;
+}
+
+
+    </script>
+</body>
+</html>
